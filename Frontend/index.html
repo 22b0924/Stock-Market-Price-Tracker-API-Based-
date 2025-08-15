@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h2>📈 Stock Prices</h2>
+<canvas id="chart"></canvas>
+<script>
+async function load(){
+  let res = await fetch("http://127.0.0.1:8000/prices");
+  let data = await res.json();
+  new Chart(document.getElementById("chart"), {
+    type: 'bar',
+    data: {
+      labels: data.map(s => s.symbol),
+      datasets: [{
+        label: 'Price ($)',
+        data: data.map(s => s.price),
+        backgroundColor: data.map(s => s.change >= 0 ? 'green' : 'red')
+      }]
+    }
+  });
+}
+load();
+</script>
+</body>
+</html>
